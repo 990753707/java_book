@@ -12,7 +12,7 @@ public interface CommentService {
     void updateComment(Comment comment);
     Comment getCommentDetail(String id);
 
-    List<Comment> getThingCommentList(String thingId, String order);
+    List<Comment> getThingCommentList(long thingId, String order);
 
-    List<Comment> getUserCommentList(String userId);
+    List<Comment> getUserCommentList(long userId);
 }

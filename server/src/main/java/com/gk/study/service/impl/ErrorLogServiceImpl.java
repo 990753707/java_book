@@ -27,7 +27,7 @@ public class ErrorLogServiceImpl extends ServiceImpl<ErrorLogMapper, ErrorLog> i
 
     @Override
     public void deleteErrorLog(String id) {
-        mapper.deleteById(id);
+        mapper.deleteById(Long.valueOf(id));
     }
 
     @Override

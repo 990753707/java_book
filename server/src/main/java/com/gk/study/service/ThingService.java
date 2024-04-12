@@ -8,13 +8,13 @@ import java.util.List;
 public interface ThingService {
     List<Thing> getThingList(String keyword, String sort, String c, String tag);
     void createThing(Thing thing);
-    void deleteThing(String id);
+    void deleteThing(long id);
 
     void updateThing(Thing thing);
 
-    Thing getThingById(String id);
+    Thing getThingById(long id);
 
-    void addWishCount(String thingId);
+    void addWishCount(long thingId);
 
-    void addCollectCount(String thingId);
+    void addCollectCount(long thingId);
 }

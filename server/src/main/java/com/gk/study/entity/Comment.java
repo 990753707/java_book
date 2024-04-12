@@ -20,11 +20,11 @@ public class Comment implements Serializable {
     @TableField
     public String likeCount;
     @TableField
-    public String userId;
+    public long userId;
     @TableField(exist = false)
     public String username; // 用户名
     @TableField
-    public String thingId;
+    public long thingId;
     @TableField(exist = false)
     public String title; // 商品名称
     @TableField(exist = false)

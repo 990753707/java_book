@@ -2,9 +2,11 @@ package com.gk.study.controller;
 
 import com.gk.study.common.APIResponse;
 import com.gk.study.common.ResponeCode;
+import com.gk.study.entity.Classification;
 import com.gk.study.entity.Thing;
 import com.gk.study.permission.Access;
 import com.gk.study.permission.AccessLevel;
+import com.gk.study.service.ClassificationService;
 import com.gk.study.service.ThingService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +33,10 @@ public class ThingController {
     @Autowired
     ThingService service;
 
-    @Value("${File.uploadPath}")
+    @Autowired
+    private ClassificationService classificationService;
+
+    @Value("${file.upload.path}")
     private String uploadPath;
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)
@@ -42,9 +47,10 @@ public class ThingController {
     }
 
     @RequestMapping(value = "/detail", method = RequestMethod.GET)
-    public APIResponse detail(String id){
+    public APIResponse detail(long id){
         Thing thing =  service.getThingById(id);
-
+        Classification classification = classificationService.getClassification(thing.getClassificationId());
+        thing.setClassification(classification.title);
         return new APIResponse(ResponeCode.SUCCESS, "查询成功", thing);
     }
 
@@ -68,7 +74,7 @@ public class ThingController {
         // 批量删除
         String[] arr = ids.split(",");
         for (String id : arr) {
-            service.deleteThing(id);
+            service.deleteThing(Long.valueOf(id));
         }
         return new APIResponse(ResponeCode.SUCCESS, "删除成功");
     }

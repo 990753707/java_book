@@ -29,7 +29,7 @@ public class BorrowServiceImpl extends ServiceImpl<BorrowMapper, Borrow> impleme
 
     @Override
     public void deleteBorrow(String id) {
-        mapper.deleteById(id);
+        mapper.deleteById(Long.valueOf(id));
     }
 
     @Override
@@ -38,7 +38,7 @@ public class BorrowServiceImpl extends ServiceImpl<BorrowMapper, Borrow> impleme
     }
 
     @Override
-    public List<Borrow> getUserBorrowList(String userId, String status) {
+    public List<Borrow> getUserBorrowList(long userId, String status) {
         return mapper.getUserBorrowList(userId, status);
     }
 

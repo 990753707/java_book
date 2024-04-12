@@ -11,5 +11,5 @@ public interface ThingWishService {
     void createThingWish(ThingWish thingWish);
     void deleteThingWish(String id);
 
-    ThingWish getThingWish(String userId, String thingId);
+    ThingWish getThingWish(long userId, long thingId);
 }

@@ -98,8 +98,8 @@ public class ThingServiceImpl extends ServiceImpl<ThingMapper, Thing> implements
     }
 
     @Override
-    public void deleteThing(String id) {
-        mapper.deleteById(id);
+    public void deleteThing(long id) {
+        mapper.deleteById(Long.valueOf(id));
     }
 
     @Override
@@ -112,22 +112,22 @@ public class ThingServiceImpl extends ServiceImpl<ThingMapper, Thing> implements
     }
 
     @Override
-    public Thing getThingById(String id) {
-        return mapper.selectById(id);
+    public Thing getThingById(long id) {
+        return mapper.selectById(Long.valueOf(id));
     }
 
     // 心愿数加1
     @Override
-    public void addWishCount(String thingId) {
-        Thing thing = mapper.selectById(thingId);
+    public void addWishCount(long thingId) {
+        Thing thing = mapper.selectById(Long.valueOf(thingId));
         thing.setWishCount(String.valueOf(Integer.parseInt(thing.getWishCount()) + 1));
         mapper.updateById(thing);
     }
 
     // 收藏数加1
     @Override
-    public void addCollectCount(String thingId) {
-        Thing thing = mapper.selectById(thingId);
+    public void addCollectCount(long thingId) {
+        Thing thing = mapper.selectById(Long.valueOf(thingId));
         thing.setCollectCount(String.valueOf(Integer.parseInt(thing.getCollectCount()) + 1));
         mapper.updateById(thing);
     }

@@ -10,5 +10,5 @@ public interface ThingCollectService {
     List<Map> getThingCollectList(String userId);
     void createThingCollect(ThingCollect thingCollect);
     void deleteThingCollect(String id);
-    ThingCollect getThingCollect(String userId, String thingId);
+    ThingCollect getThingCollect(long userId, long thingId);
 }

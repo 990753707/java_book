@@ -30,7 +30,7 @@ public class OpLogServiceImpl extends ServiceImpl<OpLogMapper, OpLog> implements
 
     @Override
     public void deleteOpLog(String id) {
-        mapper.deleteById(id);
+        mapper.deleteById(Long.valueOf(id));
     }
 
     @Override

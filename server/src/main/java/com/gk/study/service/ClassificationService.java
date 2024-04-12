@@ -11,4 +11,7 @@ public interface ClassificationService {
     void deleteClassification(String id);
 
     void updateClassification(Classification Classification);
+
+    Classification getClassification(long id);
+
 }

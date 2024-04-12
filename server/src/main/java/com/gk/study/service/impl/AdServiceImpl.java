@@ -29,7 +29,7 @@ public class AdServiceImpl extends ServiceImpl<AdMapper, Ad> implements AdServic
 
     @Override
     public void deleteAd(String id) {
-        mapper.deleteById(id);
+        mapper.deleteById(Long.valueOf(id));
     }
 
     @Override

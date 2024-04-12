@@ -6,6 +6,8 @@ import com.gk.study.entity.User;
 import com.gk.study.permission.Access;
 import com.gk.study.permission.AccessLevel;
 import com.gk.study.service.UserService;
+import com.gk.study.utils.RandomUtils;
+import com.gk.study.utils.SecureUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.UUID;
 /**
@@ -30,12 +33,10 @@ public class UserController {
 
     private final static Logger logger = LoggerFactory.getLogger(UserController.class);
 
-    String salt = "abcd1234";
-
     @Autowired
     UserService userService;
 
-    @Value("${File.uploadPath}")
+    @Value("${file.upload.path}")
     private String uploadPath;
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)
@@ -46,17 +47,20 @@ public class UserController {
 
     @RequestMapping(value = "/detail", method = RequestMethod.GET)
     public APIResponse detail(String userId){
-        User user =  userService.getUserDetail(userId);
+        User user =  userService.getUserDetail(Long.valueOf(userId));
         return new APIResponse(ResponeCode.SUCCESS, "查询成功", user);
     }
 
     // 后台用户登录
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public APIResponse login(User user){
-        user.setPassword(DigestUtils.md5DigestAsHex((user.getPassword() + salt).getBytes()));
-        User responseUser =  userService.getAdminUser(user);
-        if(responseUser != null) {
-            return new APIResponse(ResponeCode.SUCCESS, "查询成功", responseUser);
+    public APIResponse login(User user) throws NoSuchAlgorithmException {
+        User selectUser = userService.getUserByUserName(user.getUsername());
+        if(selectUser == null){
+            return new APIResponse(ResponeCode.FAIL, "用户不存在");
+        }
+        String encPwd = SecureUtil.md5(user.getPassword(), selectUser.getSalt());
+        if(selectUser.getPassword().equalsIgnoreCase(encPwd)) {
+            return new APIResponse(ResponeCode.SUCCESS, "查询成功", selectUser);
         }else {
             return new APIResponse(ResponeCode.FAIL, "用户名或密码错误");
         }
@@ -64,14 +68,17 @@ public class UserController {
 
     // 普通用户登录
     @RequestMapping(value = "/userLogin", method = RequestMethod.POST)
-    public APIResponse userLogin(User user){
-        user.setPassword(DigestUtils.md5DigestAsHex((user.getPassword() + salt).getBytes()));
-        User responseUser =  userService.getNormalUser(user);
-        if(responseUser != null) {
+    public APIResponse userLogin(User user) throws NoSuchAlgorithmException {
+        User selectUser = userService.getUserByUserName(user.getUsername());
+        if(selectUser == null){
+            return new APIResponse(ResponeCode.FAIL, "用户不存在");
+        }
+        String encPwd = SecureUtil.md5(user.getPassword(), selectUser.getSalt());
+        if(selectUser.getPassword().equalsIgnoreCase(encPwd)) {
             // 加积分
-            responseUser.setScore(String.valueOf(Integer.parseInt(responseUser.getScore()) + 10));
-            userService.updateUser(responseUser);
-            return new APIResponse(ResponeCode.SUCCESS, "查询成功", responseUser);
+            selectUser.setScore(selectUser.getScore() + 10);
+            userService.updateUser(selectUser);
+            return new APIResponse(ResponeCode.SUCCESS, "查询成功", selectUser);
         }else {
             return new APIResponse(ResponeCode.FAIL, "用户名或密码错误");
         }
@@ -80,7 +87,7 @@ public class UserController {
     // 普通用户注册
     @RequestMapping(value = "/userRegister", method = RequestMethod.POST)
     @Transactional
-    public APIResponse userRegister(User user) throws IOException {
+    public APIResponse userRegister(User user) throws IOException, NoSuchAlgorithmException {
 
         if (!StringUtils.isEmpty(user.getUsername())
                 && !StringUtils.isEmpty(user.getPassword())
@@ -93,12 +100,15 @@ public class UserController {
             if(!user.getPassword().equals(user.getRePassword())) {
                 return new APIResponse(ResponeCode.FAIL, "密码不一致");
             }
-            String md5Str = DigestUtils.md5DigestAsHex((user.getPassword() + salt).getBytes());
-            // 设置密码
-            user.setPassword(md5Str);
-            md5Str = DigestUtils.md5DigestAsHex((user.getUsername() + salt).getBytes());
+            String salt = RandomUtils.randomStr(8);
+            String encPwd = SecureUtil.md5(user.getPassword(), salt);
+            // 设置盐
+            user.setSalt(salt);
+            // 保存加密后的密码
+            user.setPassword(encPwd);
+            String token = DigestUtils.md5DigestAsHex((user.getUsername() + salt).getBytes());
             // 设置token
-            user.setToken(md5Str);
+            user.setToken(token);
 
             String avatar = saveAvatar(user);
             if(!StringUtils.isEmpty(avatar)) {
@@ -119,19 +129,21 @@ public class UserController {
     @Access(level = AccessLevel.ADMIN)
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     @Transactional
-    public APIResponse create(User user) throws IOException {
+    public APIResponse create(User user) throws IOException, NoSuchAlgorithmException {
 
         if (!StringUtils.isEmpty(user.getUsername()) || !StringUtils.isEmpty(user.getPassword())) {
             // 查重
             if(userService.getUserByUserName(user.getUsername()) != null) {
                 return new APIResponse(ResponeCode.FAIL, "用户名重复");
             }
-            String md5Str = DigestUtils.md5DigestAsHex((user.getPassword() + salt).getBytes());
+            String salt = RandomUtils.randomStr(8);
+            String encPwd = SecureUtil.md5(user.getPassword(), salt);
             // 设置密码
-            user.setPassword(md5Str);
-            md5Str = DigestUtils.md5DigestAsHex((user.getUsername() + salt).getBytes());
+            user.setPassword(encPwd);
+            String token = DigestUtils.md5DigestAsHex((user.getUsername() + salt).getBytes());
             // 设置token
-            user.setToken(md5Str);
+            user.setToken(token);
+
             user.setCreateTime(String.valueOf(System.currentTimeMillis()));
 
             String avatar = saveAvatar(user);
@@ -196,10 +208,11 @@ public class UserController {
     @Access(level = AccessLevel.LOGIN)
     @RequestMapping(value = "/updatePwd", method = RequestMethod.POST)
     @Transactional
-    public APIResponse updatePwd(String userId, String password, String newPassword) throws IOException {
-        User user =  userService.getUserDetail(userId);
+    public APIResponse updatePwd(String userId, String password, String newPassword) throws IOException, NoSuchAlgorithmException {
+        User user =  userService.getUserDetail(Long.valueOf(userId));
         if(user.getRole().equals(String.valueOf(User.NormalUser))) {
-            String md5Pwd = DigestUtils.md5DigestAsHex((password + salt).getBytes());
+            String salt = RandomUtils.randomStr(8);
+            String md5Pwd = SecureUtil.md5(password, salt);
             if(user.getPassword().equals(md5Pwd)){
                 user.setPassword(DigestUtils.md5DigestAsHex((newPassword + salt).getBytes()));
                 userService.updateUser(user);

@@ -28,11 +28,11 @@ class ThingWishServiceImpl extends ServiceImpl<ThingWishMapper, ThingWish> imple
 
     @Override
     public void deleteThingWish(String id) {
-        mapper.deleteById(id);
+        mapper.deleteById(Long.valueOf(id));
     }
 
     @Override
-    public ThingWish getThingWish(String userId, String thingId) {
+    public ThingWish getThingWish(long userId, long thingId) {
         QueryWrapper<ThingWish> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("thing_id", thingId)
                 .eq("user_id", userId);

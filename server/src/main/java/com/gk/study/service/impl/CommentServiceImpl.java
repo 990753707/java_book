@@ -21,14 +21,13 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
 
     @Override
     public void createComment(Comment comment) {
-        System.out.println(comment);
         comment.setCommentTime(String.valueOf(System.currentTimeMillis()));
         mapper.insert(comment);
     }
 
     @Override
     public void deleteComment(String id) {
-        mapper.deleteById(id);
+        mapper.deleteById(Long.valueOf(id));
     }
 
     @Override
@@ -38,16 +37,16 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
 
     @Override
     public Comment getCommentDetail(String id) {
-        return mapper.selectById(id);
+        return mapper.selectById(Long.valueOf(id));
     }
 
     @Override
-    public List<Comment> getThingCommentList(String thingId, String order) {
+    public List<Comment> getThingCommentList(long thingId, String order) {
         return mapper.selectThingCommentList(thingId, order);
     }
 
     @Override
-    public List<Comment> getUserCommentList(String userId) {
+    public List<Comment> getUserCommentList(long userId) {
         return mapper.selectUserCommentList(userId);
     }
 }

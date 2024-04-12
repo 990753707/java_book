@@ -15,8 +15,8 @@ public class ThingCollect implements Serializable {
     @TableId(value = "id",type = IdType.AUTO)
     public Long id;
     @TableField
-    public String thingId;
+    public long thingId;
     @TableField
-    public String userId;
+    public long userId;
 
 }

@@ -23,18 +23,22 @@ public class ClassificationServiceImpl extends ServiceImpl<ClassificationMapper,
 
     @Override
     public void createClassification(Classification classification) {
-        System.out.println(classification);
         classification.setCreateTime(String.valueOf(System.currentTimeMillis()));
         mapper.insert(classification);
     }
 
     @Override
     public void deleteClassification(String id) {
-        mapper.deleteById(id);
+        mapper.deleteById(Long.valueOf(id));
     }
 
     @Override
     public void updateClassification(Classification classification) {
         mapper.updateById(classification);
+    }
+
+    @Override
+    public Classification getClassification(long id) {
+        return super.getById(id);
     }
 }

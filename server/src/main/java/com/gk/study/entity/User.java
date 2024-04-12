@@ -20,11 +20,12 @@ public class User implements Serializable {
     public static final int AdminUser = 3;
 
     @TableId(value = "id",type = IdType.AUTO)
-    public String id;
+    public Long id;
     @TableField
     public String username;
     @TableField
     public String password;
+    public String salt;
     @TableField(exist = false)
     public String rePassword;
     @TableField
@@ -40,7 +41,7 @@ public class User implements Serializable {
     @TableField
     public String status;
     @TableField
-    public String score;
+    public int score;
     @TableField
     public String avatar;
     @TableField(exist = false)
@@ -52,7 +53,7 @@ public class User implements Serializable {
     @TableField
     public String pushEmail;
     @TableField
-    public String pushSwitch;
+    public Boolean pushSwitch;
 
 
 

@@ -31,7 +31,7 @@ public class BannerController {
     @Autowired
     BannerService service;
 
-    @Value("${File.uploadPath}")
+    @Value("${file.upload.path}")
     private String uploadPath;
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)

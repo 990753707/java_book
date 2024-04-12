@@ -53,7 +53,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public void deleteUser(String id) {
-        userMapper.deleteById(id);
+        userMapper.deleteById(Long.valueOf(id));
     }
 
     @Override
@@ -76,7 +76,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public User getUserDetail(String userId) {
+    public User getUserDetail(Long userId) {
         QueryWrapper<User> queryWrapper = new QueryWrapper();
         queryWrapper.eq("id", userId);
         return userMapper.selectOne(queryWrapper);

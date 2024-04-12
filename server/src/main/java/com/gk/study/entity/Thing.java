@@ -57,6 +57,9 @@ public class Thing implements Serializable {
     public Long classificationId;
 
     @TableField(exist = false)
+    public String classification;
+
+    @TableField(exist = false)
     public List<Long> tags; // 标签
 
     @TableField(exist = false)

@@ -41,7 +41,7 @@ public class BorrowController {
 
     // 用户list
     @RequestMapping(value = "/userBorrowList", method = RequestMethod.GET)
-    public APIResponse userBorrowList(String userId, String status){
+    public APIResponse userBorrowList(long userId, String status){
         List<Borrow> list =  service.getUserBorrowList(userId, status);
         return new APIResponse(ResponeCode.SUCCESS, "查询成功", list);
     }
@@ -55,7 +55,7 @@ public class BorrowController {
         borrow.setExpectTime(String.valueOf(expectTime));
         borrow.setStatus("1"); // 借入
         borrow.setHasDelayed("0"); // 没延期
-        if(StringUtils.isNotBlank(borrow.getThingId()) && StringUtils.isNotBlank(borrow.getUserId())){
+        if(borrow.getThingId() != null && borrow.getUserId() != null){
             service.createBorrow(borrow);
             // 库存-1
             Thing thing = thingService.getThingById(borrow.getThingId());
