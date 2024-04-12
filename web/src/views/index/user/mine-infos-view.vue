@@ -4,15 +4,15 @@
       <img :src="AvatarImg" class="avatar-img">
       <div class="name-box">
         <h2 class="nick">{{ userStore.user_name }}</h2>
-        <div class="age">
+        <!-- <div class="age">
           <span>活跃1天</span>
           <span class="give-point"></span>
-        </div>
+        </div> -->
       </div>
     </div>
     <div class="counts-view">
       <div class="counts flex-view">
-        <div class="fans-box flex-item" @click="clickMenu('collectThingView')">
+        <!-- <div class="fans-box flex-item" @click="clickMenu('collectThingView')">
           <div class="text">收藏</div>
           <div class="num">{{collectCount}}</div>
         </div>
@@ -21,7 +21,7 @@
         <div class="follow-box flex-item" @click="clickMenu('wishThingView')">
           <div class="text">心愿单</div>
           <div class="num">{{wishCount}}</div>
-        </div>
+        </div> -->
 <!--        <div class="split-line">-->
 <!--        </div>-->
 <!--        <div class="points-box flex-item">-->
@@ -41,14 +41,14 @@
           <img :src="CommentIconImg">
           <span>我的评论</span>
         </div>
-        <div class="mine-item flex-view" @click="clickMenu('addressView')">
+        <!-- <div class="mine-item flex-view" @click="clickMenu('addressView')">
           <img :src="AddressIconImage">
           <span>地址管理</span>
-        </div>
-        <div class="mine-item flex-view" @click="clickMenu('scoreView')">
+        </div> -->
+        <!-- <div class="mine-item flex-view" @click="clickMenu('scoreView')">
           <img :src="PointIconImage">
           <span>我的积分</span>
-        </div>
+        </div> -->
       </div>
     </div>
     <div class="setting-box">
@@ -62,14 +62,14 @@
           <img :src="SafeIconImage" alt="账号安全">
           <span>账号安全</span>
         </div>
-        <div class="mine-item flex-view" @click="clickMenu('pushView')">
+        <!-- <div class="mine-item flex-view" @click="clickMenu('pushView')">
           <img :src="PushIconImage" alt="推送设置">
           <span>推送设置</span>
         </div>
         <div class="mine-item flex-view" @click="clickMenu('messageView')">
           <img :src="MessageIconImage" alt="消息管理">
           <span>消息管理</span>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>

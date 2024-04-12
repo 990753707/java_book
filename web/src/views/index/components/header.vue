@@ -35,11 +35,12 @@
       <template v-else>
         <button class="login btn hidden-sm" @click="goLogin()">登录</button>
       </template>
-
+<!-- 
       <div class="right-icon" @click="msgVisible=true">
         <img :src="MessageIcon">
         <span class="msg-point" style=""></span>
       </div>
+      -->
       <div>
         <a-drawer
             title="我的消息"

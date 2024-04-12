@@ -12,13 +12,13 @@
               </progress>
             </div>
           </div>
-          <div class="item flex-view">
+          <!-- <div class="item flex-view">
             <div class="label">绑定手机</div>
             <div class="right-box">
               <input class="input-dom" placeholder="请输入手机号">
               <a-button type="link" @click="handleBindMobile()">更换</a-button>
             </div>
-          </div>
+          </div> -->
         </div>
         <div class="edit-pwd-box" style="display;">
           <div class="pwd-edit">
